@@ -1,6 +1,5 @@
 package family_tree;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -24,41 +23,43 @@ public class Main {
         familyTree.addMember(child1);
         familyTree.addMember(child2);
 
+        FileOperations fileOps = new FamilyTreeFileHandler();
+        String filePath = "family_tree.dat";
+
+        fileOps.writeToFile(familyTree, filePath);
+        System.out.println("Family tree saved to file: " + filePath);
+
+        FamilyTree loadedFamilyTree = fileOps.readFromFile(filePath);
+        System.out.println("Family tree loaded from file: " + filePath);
+
+        System.out.println("\n=== Loaded Family Tree ===");
+        for (Human member : loadedFamilyTree.getMembers()) {
+            System.out.println(member);
+        }
+
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the name of the person to view their children: ");
-        String name = scanner.nextLine();
+        System.out.print("\nEnter the name of the person to view their children: ");
+        String name = scanner.nextLine().trim();
 
-        Human person = familyTree.getMembers().stream()
-                .filter(h -> h.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+        Human selectedMember = loadedFamilyTree.getMemberByName(name);
 
-        if (person != null) {
-            List<Human> children = familyTree.getChildren(person);
-            System.out.println(name + "'s children:");
-            for (Human child : children) {
-                System.out.println(" - " + child.getFormattedDetails());
+        if (selectedMember != null) {
+            System.out.println("\n--- Information about " + selectedMember.getName() + " ---");
+            System.out.println(selectedMember);
+
+            List<Human> children = loadedFamilyTree.getChildren(selectedMember);
+            if (children.isEmpty()) {
+                System.out.println(selectedMember.getName() + " has no children.");
+            } else {
+                System.out.println("\n--- Children of " + selectedMember.getName() + " ---");
+                for (Human child : children) {
+                    System.out.println(child);
+                }
             }
         } else {
-            System.out.println("Person not found in the family tree.");
+            System.out.println("\nNo member found with the name '" + name + "'. Please make sure you entered the name correctly.");
         }
 
-        FileOperations fileOperations = new FamilyTreeFileHandler();
-        String fileName = "family_tree.ser";
-
-        try {
-            fileOperations.writeToFile(fileName, familyTree);
-            System.out.println("Family tree has been written to file.");
-
-            FamilyTree loadedFamilyTree = fileOperations.readFromFile(fileName);
-            System.out.println("Family tree has been read from file.");
-            System.out.println("Family members:");
-            for (Human member : loadedFamilyTree.getMembers()) {
-                System.out.println(member.getFormattedDetails());
-            }
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        scanner.close();
     }
 }

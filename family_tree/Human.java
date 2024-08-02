@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Human implements Serializable {
+    private static final long serialVersionUID = 1L; // Это важно для обеспечения совместимости версий сериализации.
+
     private String name;
     private Gender gender;
     private LocalDate birthDate;
@@ -61,19 +63,12 @@ public class Human implements Serializable {
         }
     }
 
-    public String getFormattedDetails() {
-        return "Name: " + name +
-                ", Gender: " + gender +
-                ", Birth Date: " + birthDate +
-                ", Death Date: " + (deathDate != null ? deathDate : "N/A");
-    }
-
     @Override
     public String toString() {
-        return "Human{name='" + name + '\'' +
-                ", gender=" + gender +
-                ", birthDate=" + birthDate +
-                ", deathDate=" + deathDate +
-                '}';
+        return String.format("Name: %-10s | Gender: %-6s | Birth Date: %-10s | Death Date: %-10s",
+                name,
+                gender,
+                birthDate,
+                deathDate != null ? deathDate : "N/A");
     }
 }

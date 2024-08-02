@@ -1,8 +1,8 @@
 package family_tree;
 
-import java.io.IOException;
+import java.io.Serializable;
 
 public interface FileOperations {
-    void writeToFile(String fileName, FamilyTree familyTree) throws IOException;
-    FamilyTree readFromFile(String fileName) throws IOException, ClassNotFoundException;
+    void writeToFile(FamilyTree familyTree, String filePath);
+    FamilyTree readFromFile(String filePath);
 }
