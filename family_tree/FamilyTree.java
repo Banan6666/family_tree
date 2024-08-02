@@ -1,9 +1,10 @@
 package family_tree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FamilyTree {
+public class FamilyTree implements Serializable {
     private List<Human> members;
 
     public FamilyTree() {
@@ -20,14 +21,5 @@ public class FamilyTree {
 
     public List<Human> getMembers() {
         return members;
-    }
-
-    public Human findMemberByName(String name) {
-        for (Human member : members) {
-            if (member.getName().equalsIgnoreCase(name)) {
-                return member;
-            }
-        }
-        return null;
     }
 }

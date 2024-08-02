@@ -1,5 +1,6 @@
 package family_tree;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -24,22 +25,40 @@ public class Main {
         familyTree.addMember(child2);
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the name of the person to find their children:");
+        System.out.print("Enter the name of the person to view their children: ");
         String name = scanner.nextLine();
 
-        Human person = familyTree.findMemberByName(name);
+        Human person = familyTree.getMembers().stream()
+                .filter(h -> h.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+
         if (person != null) {
             List<Human> children = familyTree.getChildren(person);
-            if (!children.isEmpty()) {
-                System.out.println(person.getName() + "'s children:");
-                for (Human child : children) {
-                    System.out.println(child.getName());
-                }
-            } else {
-                System.out.println(person.getName() + " has no children.");
+            System.out.println(name + "'s children:");
+            for (Human child : children) {
+                System.out.println(" - " + child.getFormattedDetails());
             }
         } else {
             System.out.println("Person not found in the family tree.");
+        }
+
+        FileOperations fileOperations = new FamilyTreeFileHandler();
+        String fileName = "family_tree.ser";
+
+        try {
+            fileOperations.writeToFile(fileName, familyTree);
+            System.out.println("Family tree has been written to file.");
+
+            FamilyTree loadedFamilyTree = fileOperations.readFromFile(fileName);
+            System.out.println("Family tree has been read from file.");
+            System.out.println("Family members:");
+            for (Human member : loadedFamilyTree.getMembers()) {
+                System.out.println(member.getFormattedDetails());
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

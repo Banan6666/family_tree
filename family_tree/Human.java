@@ -1,10 +1,11 @@
 package family_tree;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Human {
+public class Human implements Serializable {
     private String name;
     private Gender gender;
     private LocalDate birthDate;
@@ -58,6 +59,13 @@ public class Human {
         if (!children.contains(child)) {
             children.add(child);
         }
+    }
+
+    public String getFormattedDetails() {
+        return "Name: " + name +
+                ", Gender: " + gender +
+                ", Birth Date: " + birthDate +
+                ", Death Date: " + (deathDate != null ? deathDate : "N/A");
     }
 
     @Override
