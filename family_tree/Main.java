@@ -1,5 +1,11 @@
 package family_tree;
 
+import family_tree.model.FamilyTree;
+import family_tree.model.Gender;
+import family_tree.model.Human;
+import family_tree.file.FamilyTreeFileHandler;
+import family_tree.file.FileOperations;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -38,6 +44,26 @@ public class Main {
         }
 
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\nChoose a sorting method:");
+        System.out.println("1. Sort by name");
+        System.out.println("2. Sort by birth date");
+        int sortChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (sortChoice == 1) {
+            loadedFamilyTree.sortByName();
+        } else if (sortChoice == 2) {
+            loadedFamilyTree.sortByBirthDate();
+        } else {
+            System.out.println("Invalid choice. No sorting applied.");
+        }
+
+        System.out.println("\n=== Sorted Family Tree ===");
+        for (Human member : loadedFamilyTree.getMembers()) {
+            System.out.println(member);
+        }
+
         System.out.print("\nEnter the name of the person to view their children: ");
         String name = scanner.nextLine().trim();
 
