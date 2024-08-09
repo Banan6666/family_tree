@@ -19,10 +19,9 @@ public class FamilyTree<T extends FamilyMember> implements Serializable, Iterabl
     }
 
     public List<T> getChildren(T parent) {
-        // Приводим типы объектов в списке к типу T
         List<T> children = new ArrayList<>();
         for (FamilyMember child : parent.getChildren()) {
-            children.add((T) child); // Приведение типа
+            children.add((T) child);
         }
         return children;
     }
